@@ -1,16 +1,20 @@
 from random import randint, shuffle
-
+import copy
 
 
 #####-----CLASS START----------------------
 
+
+
 #degree of puzzle
-n = 4
+n = 3
 
 #initializes n*n by n*n grid of zeros
 rows, cols = (n*n), (n*n)
 grid = [[0]*cols for _ in range((rows))]
 
+#solved puzzle
+solvedPuzzle = grid
 
 #list of possible numbers
 numberList = list(range(1,(n*n)+1))
@@ -22,6 +26,9 @@ counter = 1
 def gen():
     global counter
     fillGrid(grid)
+    #print(grid)
+    global solvedPuzzle
+    solvedPuzzle = list(map(list, grid))
     attempts = 3
     #counter=1
     while attempts > 0:
@@ -54,8 +61,10 @@ def gen():
     #return gridToString(grid)
 
 #turn grid to string
-def gridToString(grid):
-    return ' '.join([' '.join(map(str, row)) for row in grid])
+def gridToString(puzzle):
+    s = ' '.join([' '.join(map(str, row)) for row in puzzle])
+    #s = s.replace(" ","")
+    return s
 
 
 #backtrace function(recursive) thats checks all possible solutions until a single solution is found
@@ -143,4 +152,35 @@ def checkGrid(grid):
 
 
 #####-----CLASS END----------------------
-print(gen())
+
+#creates a grid for the solutions to go in with length 3 and width 2
+gor,cor = (10000),(2)
+gridOfPuzzles = [[""]*cor for _ in range((gor))]
+
+#fills grid of puzzles with all puzzles
+for i in range(gor):
+    #print("hi")
+    r = randint(2,5) # range of n for all puzzles
+    print(r)
+    n = r
+    #initializes n*n by n*n grid to zeros
+    rows, cols = (n*n), (n*n)
+    grid = [[0]*cols for _ in range((rows))]
+
+    numberList = list(range(1,(n*n)+1))
+
+    gen()
+    gridOfPuzzles[i][0] = gridToString(grid)
+    gridOfPuzzles[i][1] = gridToString(solvedPuzzle)
+    grid = [[0]*cols for _ in range((rows))]
+    solvedPuzzle = [[0]*cols for _ in range((rows))]
+
+#writing to read_csv
+import os
+os.remove("nxnData.csv")
+f = open("nxnData.csv", "x")
+
+for r in range(len(gridOfPuzzles)):
+        f.write(gridOfPuzzles[r][0]+ "," + gridOfPuzzles[r][1] + "\n")
+
+f.close()
