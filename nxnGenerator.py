@@ -11,7 +11,7 @@ n = 3
 
 #initializes n*n by n*n grid of zeros
 rows, cols = (n*n), (n*n)
-grid = [[0]*cols for _ in range((rows))]
+grid = [[-1]*cols for _ in range((rows))]
 
 #solved puzzle
 solvedPuzzle = grid
@@ -41,7 +41,7 @@ def gen():
             col = randint(0,((n*n)-1))
         #backup incase there are more solutions
         backup = grid[row][col]
-        grid[row][col]=0
+        grid[row][col]=(-1)
         #Copy the grid
         copyGrid = []
         for r in range(0,(n*n)):
@@ -74,7 +74,7 @@ def solveGrid(grid):
   for i in range(0,(n**4)):
     row=i//(n*n)
     col=i%(n*n)
-    if grid[row][col]==0:
+    if grid[row][col]==(-1):
       for value in range (1,(n*n + 1)):
         #Check that this value has not already be used on this row
         if not(value in grid[row]):
@@ -90,7 +90,7 @@ def solveGrid(grid):
                 if solveGrid(grid):
                   return True
       break
-  grid[row][col]=0
+  grid[row][col]=(-1)
 
 
 
@@ -102,7 +102,7 @@ def fillGrid(grid):
   for i in range(0,(n**4)):
     row=i//(n*n)
     col=i%(n*n)
-    if grid[row][col]==0:
+    if grid[row][col]==(-1):
       shuffle(numberList)
       for value in numberList:
         #Check that this value has not already be used on this row
@@ -118,7 +118,7 @@ def fillGrid(grid):
                 if fillGrid(grid):
                   return True
       break
-  grid[row][col]=0
+  grid[row][col]=(-1)
 
 #returns true if value is in the column
 def valueInCol(col, value):
@@ -145,7 +145,7 @@ def valueInSquare(row, col, value):
 def checkGrid(grid):
     for row in range(0,(n*n)):
         for col in range(0,(n*n)):
-            if grid[row][col]==0:
+            if grid[row][col]==(-1):
                 return False
 
     return True
@@ -161,19 +161,19 @@ gridOfPuzzles = [[""]*cor for _ in range((gor))]
 for i in range(gor):
     #print("hi")
     r = randint(2,5) # range of n for all puzzles
-    print(r)
+    print(i, ":", r)
     n = r
     #initializes n*n by n*n grid to zeros
     rows, cols = (n*n), (n*n)
-    grid = [[0]*cols for _ in range((rows))]
+    grid = [[-1]*cols for _ in range((rows))]
 
     numberList = list(range(1,(n*n)+1))
 
     gen()
     gridOfPuzzles[i][0] = gridToString(grid)
     gridOfPuzzles[i][1] = gridToString(solvedPuzzle)
-    grid = [[0]*cols for _ in range((rows))]
-    solvedPuzzle = [[0]*cols for _ in range((rows))]
+    grid = [[-1]*cols for _ in range((rows))]
+    solvedPuzzle = [[-1]*cols for _ in range((rows))]
 
 #writing to read_csv
 import os
